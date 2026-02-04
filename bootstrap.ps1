@@ -6,6 +6,7 @@ winget install --id Rustdesk.Rustdesk
 winget install --id Brave.Brave
 winget install --id Microsoft.VisualStudioCode
 winget install --id Microsoft.DSC
+winget install --id GitHub.cli
 winget install --id Anthropic.ClaudeCode
 winget install --id OpenAI.Codex
 dsc config set --document oh-my-posh-setup.yaml
