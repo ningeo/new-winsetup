@@ -1,5 +1,13 @@
 winget install --id Microsoft.WindowsTerminal
 winget install --id Microsoft.Powershell
+
+# Re-invoke with pwsh if currently running Windows PowerShell 5.x
+if ($PSVersionTable.PSVersion.Major -le 5) {
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+    pwsh -ExecutionPolicy Bypass -File $MyInvocation.MyCommand.Path
+    exit $LASTEXITCODE
+}
+
 wsl --install
 winget install --id Git.Git
 winget install --id Rustdesk.Rustdesk
@@ -10,15 +18,22 @@ winget install --id GitHub.cli
 winget install --id Anthropic.ClaudeCode
 winget install --id OpenAI.Codex
 winget install --id JanDeDobbeleer.OhMyPosh
-dsc config set --file oh-my-posh-setup.yaml
+
+# Copy theme files to a fixed location
+$ompDir = "$HOME\.config\oh-my-posh"
+if (-not (Test-Path $ompDir)) { New-Item -ItemType Directory -Path $ompDir -Force }
+Copy-Item "$PSScriptRoot\pwshtheme.omp.json" "$ompDir\pwshtheme.omp.json" -Force
+Copy-Item "$PSScriptRoot\bashtheme.omp.json" "$ompDir\bashtheme.omp.json" -Force
+
+dsc config set --file "$PSScriptRoot\oh-my-posh-setup.yaml"
 
 # Refresh PATH so oh-my-posh is available
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
-# Install Nerd Fonts system-wide via Oh My Posh
-oh-my-posh font install --system 0xProto
-oh-my-posh font install --system JetBrainsMono
-oh-my-posh font install --system FiraCode
+# Install Nerd Fonts via Oh My Posh (installs system-wide when running as admin)
+oh-my-posh font install 0xProto
+oh-my-posh font install JetBrainsMono
+oh-my-posh font install FiraCode
 
 # Configure Windows Terminal default font
 $wtSettings = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
@@ -40,7 +55,7 @@ if (Test-Path $vscodeSettings) {
 } else {
     $vsSettings = [PSCustomObject]@{}
 }
-$vsSettings | Add-Member -NotePropertyName 'editor.fontFamily' -NotePropertyValue "'0xProto Nerd Font', 'JetBrainsMono Nerd Font', Consolas, monospace" -Force
+$vsSettings | Add-Member -NotePropertyName 'editor.fontFamily' -NotePropertyValue "'0xProto Nerd Font', 'JetBrainsMono NF', Consolas, monospace" -Force
 $vsSettings | Add-Member -NotePropertyName 'editor.fontLigatures' -NotePropertyValue $true -Force
 $vsSettings | Add-Member -NotePropertyName 'terminal.integrated.fontFamily' -NotePropertyValue "'0xProto Nerd Font'" -Force
 $vsSettings | ConvertTo-Json -Depth 10 | Set-Content $vscodeSettings

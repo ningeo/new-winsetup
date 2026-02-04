@@ -3,36 +3,32 @@ metadata:
   winget:
     processor: dscv3
 resources:
-  - name: Install Oh My Posh
-    type: Microsoft.WinGet.DSC/WinGetPackage
-    properties:
-      id: JanDeDobbeleer.OhMyPosh
-      source: winget
-
   - name: Add Oh My Posh configuration
     type: OhMyPosh/Config
     properties:
       states:
-        - source: ./pwshtheme.omp.json
+        - source: ~/.config/oh-my-posh/pwshtheme.omp.json
           format: json
+          version: 2
 
   - name: Initialize PowerShell
     type: OhMyPosh/Shell
     properties:
       states:
         - name: pwsh
-          command: oh-my-posh init pwsh --config ./pwshtheme.omp.json
+          command: oh-my-posh init pwsh --config ~/.config/oh-my-posh/pwshtheme.omp.json
 
   - name: Add Bash OMP config
     type: OhMyPosh/Config
     properties:
       states:
-        - source: ./bashtheme.omp.json
+        - source: ~/.config/oh-my-posh/bashtheme.omp.json
           format: json
+          version: 2
 
   - name: Initialize bash
     type: OhMyPosh/Shell
     properties:
       states:
         - name: bash
-          command: oh-my-posh init bash --config ./bashtheme.omp.json
+          command: oh-my-posh init bash --config ~/.config/oh-my-posh/bashtheme.omp.json
