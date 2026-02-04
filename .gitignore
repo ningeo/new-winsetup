@@ -1,6 +1,7 @@
 # Windows
 Thumbs.db
 Desktop.ini
+nul
 
 # PowerShell
 *.ps1xml
