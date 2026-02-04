@@ -15,10 +15,10 @@ dsc config set --file oh-my-posh-setup.yaml
 # Refresh PATH so oh-my-posh is available
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
-# Install Nerd Fonts via Oh My Posh
-oh-my-posh font install 0xProto
-oh-my-posh font install JetBrainsMono
-oh-my-posh font install FiraCode
+# Install Nerd Fonts system-wide via Oh My Posh
+oh-my-posh font install --system 0xProto
+oh-my-posh font install --system JetBrainsMono
+oh-my-posh font install --system FiraCode
 
 # Configure Windows Terminal default font
 $wtSettings = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
