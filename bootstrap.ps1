@@ -9,7 +9,8 @@ winget install --id Microsoft.DSC
 winget install --id GitHub.cli
 winget install --id Anthropic.ClaudeCode
 winget install --id OpenAI.Codex
-dsc config set --document oh-my-posh-setup.yaml
+winget install --id JanDeDobbeleer.OhMyPosh
+dsc config set --file oh-my-posh-setup.yaml
 
 # Refresh PATH so oh-my-posh is available
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
