@@ -1,0 +1,38 @@
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/config/document.json
+metadata:
+  winget:
+    processor: dscv3
+resources:
+  - name: Install Oh My Posh
+    type: Microsoft.WinGet.DSC/WinGetPackage
+    properties:
+      id: JanDeDobbeleer.OhMyPosh
+      source: winget
+
+  - name: Add Oh My Posh configuration
+    type: OhMyPosh/Config
+    properties:
+      states:
+        - source: ./pwshtheme.omp.json
+          format: json
+
+  - name: Initialize PowerShell
+    type: OhMyPosh/Shell
+    properties:
+      states:
+        - name: pwsh
+          command: oh-my-posh init pwsh --config ./pwshtheme.omp.json
+
+  - name: Add Bash OMP config
+    type: OhMyPosh/Config
+    properties:
+      states:
+        - source: ./bashtheme.omp.json
+          format: json
+
+  - name: Initialize bash
+    type: OhMyPosh/Shell
+    properties:
+      states:
+        - name: bash
+          command: oh-my-posh init bash --config ./bashtheme.omp.json
