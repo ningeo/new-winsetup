@@ -45,4 +45,18 @@ else
     echo "oh-my-posh init already in ~/.bashrc"
 fi
 
+# Add ssh-agent start block to .bashrc if not already present
+if ! grep -qF 'Start ssh-agent and set environment variables' "$HOME/.bashrc"; then
+    cat >> "$HOME/.bashrc" << 'SSHAGENT'
+
+# Start ssh-agent and set environment variables
+if [ -z "$SSH_AUTH_SOCK" ]; then
+  eval "$(ssh-agent -s)"
+fi
+SSHAGENT
+    echo "Added ssh-agent starter to ~/.bashrc"
+else
+    echo "ssh-agent starter already in ~/.bashrc"
+fi
+
 echo "Done. Restart your shell or run: source ~/.bashrc"
